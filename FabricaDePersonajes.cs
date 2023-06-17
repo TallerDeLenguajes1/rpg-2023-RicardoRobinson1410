@@ -1,4 +1,6 @@
-namespace personajes{
+using System;
+using System.IO;
+namespace espacioPersonajes{
 public class FabricaDePersonajes{
 string[] nombresLuchadores=
 {
@@ -41,67 +43,78 @@ DateTime[] fechasNacimiento =
 };
 
     public personajes CrearPersonaje(){
+        datos DatosPersonaje = new datos();
+        var CaracteristicasPersonaje = new caracteristicas();
         personajes personaje=new personajes();
         Random indicerandom=new Random();
         int i=indicerandom.Next(0,9);
-        personaje.DatosPersonaje.Nombre=nombresLuchadores[i];
-        personaje.DatosPersonaje.Apodo=apodosLuchadores[i];
-        personaje.DatosPersonaje.FechaNac=fechasNacimiento[i];
-        Console.WriteLine("Ingrese el tipo de personaje (El personaje tendrá 10 puntos en la habilidad que predomine, en las otras sera aleatorio)");
-        Console.WriteLine("1. Veloz");
-        Console.WriteLine("2. Fuerte");
-        Console.WriteLine("3. Habil");
-        Console.WriteLine("4. Resistente");
-        string? a=Console.ReadLine();
-        Tipopersonjes tip;
-        bool anda1=Enum.TryParse(a, out tip);
-        if(anda1){
-            Console.WriteLine("Ingreso existoso enum");
-        }else{
-            Console.WriteLine("Error enum");
-        }
-        personaje.DatosPersonaje.TipoPersonaje=tip;
-        personaje.DatosPersonaje.Edad=CalcularEdad();
-        switch (personaje.DatosPersonaje.TipoPersonaje)
+        DatosPersonaje.Nombre=nombresLuchadores[i];
+        DatosPersonaje.Apodo=apodosLuchadores[i];
+        DatosPersonaje.FechaNac=fechasNacimiento[i];
+        // Console.WriteLine("Ingrese el tipo de personaje (El personaje tendrá 10 puntos en la habilidad que predomine, en las otras sera aleatorio)");
+        // Console.WriteLine("1. Veloz");
+        // Console.WriteLine("2. Fuerte");
+        // Console.WriteLine("3. Habil");
+        // Console.WriteLine("4. Resistente");
+        // string? a=Console.ReadLine();
+        // Tipopersonjes tip;
+        // bool anda1=Enum.TryParse(a, out tip);
+        // if(anda1){
+        //     Console.WriteLine("Ingreso existoso enum");
+        // }else{
+        //     Console.WriteLine("Error enum");
+        // }
+            Random rand = new Random();
+            Tipopersonjes tip = (Tipopersonjes)rand.Next(1,4);
+        DatosPersonaje.TipoPersonaje=tip;
+        DatosPersonaje.Edad=CalcularEdad(DatosPersonaje.FechaNac);
+        switch (DatosPersonaje.TipoPersonaje)
         {
             case Tipopersonjes.veloz: 
-                personaje.CaracteristicasPersonaje.Velocidad=10;
-                personaje.CaracteristicasPersonaje.Destreza=indicerandom.Next(1,5);
-                personaje.CaracteristicasPersonaje.Fuerza=indicerandom.Next(1,10);
-                personaje.CaracteristicasPersonaje.Nivel=indicerandom.Next(1,10);
-                personaje.CaracteristicasPersonaje.Armadura1=indicerandom.Next(1,10);
+                CaracteristicasPersonaje.Velocidad=10;
+                CaracteristicasPersonaje.Destreza=indicerandom.Next(1,5);
+                CaracteristicasPersonaje.Fuerza=indicerandom.Next(1,10);
+                CaracteristicasPersonaje.Nivel=indicerandom.Next(1,10);
+                CaracteristicasPersonaje.Armadura=indicerandom.Next(1,10);
                 break;
             case Tipopersonjes.habil: 
-                personaje.CaracteristicasPersonaje.Velocidad=indicerandom.Next(1,10);
-                personaje.CaracteristicasPersonaje.Destreza=5;
-                personaje.CaracteristicasPersonaje.Fuerza=indicerandom.Next(1,10);
-                personaje.CaracteristicasPersonaje.Nivel=indicerandom.Next(1,10);
-                personaje.CaracteristicasPersonaje.Armadura1=indicerandom.Next(1,10);
+                CaracteristicasPersonaje.Velocidad=indicerandom.Next(1,10);
+                CaracteristicasPersonaje.Destreza=5;
+                CaracteristicasPersonaje.Fuerza=indicerandom.Next(1,10);
+                CaracteristicasPersonaje.Nivel=indicerandom.Next(1,10);
+                CaracteristicasPersonaje.Armadura=indicerandom.Next(1,10);
                 break;
             case Tipopersonjes.fuerte:
-                personaje.CaracteristicasPersonaje.Velocidad=indicerandom.Next(1,10);
-                personaje.CaracteristicasPersonaje.Destreza=indicerandom.Next(1,5);
-                personaje.CaracteristicasPersonaje.Fuerza=10;
-                personaje.CaracteristicasPersonaje.Nivel=indicerandom.Next(1,10);
-                personaje.CaracteristicasPersonaje.Armadura1=indicerandom.Next(1,10);
+                CaracteristicasPersonaje.Velocidad=indicerandom.Next(1,10);
+                CaracteristicasPersonaje.Destreza=indicerandom.Next(1,5);
+                CaracteristicasPersonaje.Fuerza=10;
+                CaracteristicasPersonaje.Nivel=indicerandom.Next(1,10);
+                CaracteristicasPersonaje.Armadura=indicerandom.Next(1,10);
                 break;
             case Tipopersonjes.resistente:
-                personaje.CaracteristicasPersonaje.Velocidad=indicerandom.Next(1,10);
-                personaje.CaracteristicasPersonaje.Destreza=indicerandom.Next(1,5);
-                personaje.CaracteristicasPersonaje.Fuerza=indicerandom.Next(1,10);
-                personaje.CaracteristicasPersonaje.Nivel=indicerandom.Next(1,10);
-                personaje.CaracteristicasPersonaje.Armadura1=10;
+                CaracteristicasPersonaje.Velocidad=indicerandom.Next(1,10);
+                CaracteristicasPersonaje.Destreza=indicerandom.Next(1,5);
+                CaracteristicasPersonaje.Fuerza=indicerandom.Next(1,10);
+                CaracteristicasPersonaje.Nivel=indicerandom.Next(1,10);
+                CaracteristicasPersonaje.Armadura=10;
                 break;            
         }
-        personaje.CaracteristicasPersonaje.Nivel=indicerandom.Next(1,10);
+        CaracteristicasPersonaje.Nivel=indicerandom.Next(1,10);
+        CaracteristicasPersonaje.Salud=100;
+        personaje.CaracteristicasPersonaje = new caracteristicas();
+        personaje.DatosPersonaje = new datos();
+        personaje.CaracteristicasPersonaje=CaracteristicasPersonaje;
+        personaje.DatosPersonaje=DatosPersonaje;
 
-          int CalcularEdad(){
-            DateTime fechaHoy= DateTime.Now;
-            int aniohoy=fechaHoy.Year;
-            int anionac=fechaHoy.Year;
-            return(aniohoy-anionac);
-        }
         return(personaje);
     }
-}
+
+        private int CalcularEdad(DateTime fechanac)
+        {
+            DateTime fechaHoy = DateTime.Now;
+            int aniohoy = fechaHoy.Year;
+            int anionac=fechanac.Year ;
+            return (aniohoy - anionac);
+        }
+    }
 }
