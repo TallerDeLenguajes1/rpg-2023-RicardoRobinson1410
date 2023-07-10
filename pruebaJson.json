@@ -1,0 +1,51 @@
+{
+   "count": 1,
+   "data": [
+      {
+         "app_temp": 24.8,
+         "aqi": 47,
+         "city_name": "Raleigh",
+         "clouds": 90,
+         "country_code": "US",
+         "datetime": "2023-07-10:14",
+         "dewpt": 21.4,
+         "dhi": 115.72,
+         "dni": 889.63,
+         "elev_angle": 56.56,
+         "ghi": 850.49,
+         "gust": null,
+         "h_angle": -38.6,
+         "lat": 35.7796,
+         "lon": -78.6382,
+         "ob_time": "2023-07-10 14:40",
+         "pod": "d",
+         "precip": 0,
+         "pres": 1000.7,
+         "rh": 85,
+         "slp": 1013.5,
+         "snow": 0,
+         "solar_rad": 363.1,
+         "sources": [
+            "1327W"
+         ],
+         "state_code": "NC",
+         "station": "1327W",
+         "sunrise": "10:07",
+         "sunset": "00:33",
+         "temp": 24.1,
+         "timezone": "America/New_York",
+         "ts": 1689000000,
+         "uv": 2.9606898,
+         "vis": 16,
+         "weather": {
+            "code": 803,
+            "description": "Broken clouds",
+            "icon": "c03d"
+         },
+         "wind_cdir": "N",
+         "wind_cdir_full": "north",
+         "wind_dir": 0,
+         "wind_spd": 1
+      }
+   ]
+}

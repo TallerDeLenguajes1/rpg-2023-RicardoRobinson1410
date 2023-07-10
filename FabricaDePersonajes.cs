@@ -42,12 +42,11 @@ DateTime[] fechasNacimiento =
     new DateTime(1985, 5, 25)     // Roman Reigns
 };
 
-    public personajes CrearPersonaje(){
+    public personajes CrearPersonaje(int i){
         datos DatosPersonaje = new datos();
         var CaracteristicasPersonaje = new caracteristicas();
         personajes personaje=new personajes();
         Random indicerandom=new Random();
-        int i=indicerandom.Next(0,9);
         DatosPersonaje.Nombre=nombresLuchadores[i];
         DatosPersonaje.Apodo=apodosLuchadores[i];
         DatosPersonaje.FechaNac=fechasNacimiento[i];
