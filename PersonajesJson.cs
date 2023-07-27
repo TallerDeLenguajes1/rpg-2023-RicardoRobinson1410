@@ -9,6 +9,7 @@ namespace persistenciaDeDatos
 {
     class personajesJson
     {
+        //Funcion para guardar una lista de personajes en un archivo json
         public void GuardarPersonajes(string nombreArchivo, List<personajes> listaPersonajes)
         {
             FileStream archivo = new FileStream(nombreArchivo, FileMode.OpenOrCreate);
@@ -20,6 +21,7 @@ namespace persistenciaDeDatos
             }
 
         }
+        //Función para leer lista de personajes desde un archivo JSON
         public List<espacioPersonajes.personajes> LeerPersonajes(string nombreArchivo)
         {
             FileStream archivo = new FileStream(nombreArchivo, FileMode.Open);
@@ -34,6 +36,7 @@ namespace persistenciaDeDatos
             PersonajesJson = JsonSerializer.Deserialize<List<personajes>>(archivoLeido);
             return (PersonajesJson);
         }
+        //Funcion para controlar si un archivo existe y no esta vacío
         public bool Existe(string nombreArchivo)
         {
             if (File.Exists(nombreArchivo))
@@ -57,6 +60,7 @@ namespace persistenciaDeDatos
             }
         }
 
+//Funcion para según una latitud y longitud aleatoria obtener el clima de esta por medio de una APi
         public Root? GetClimas()
         {
             Root climas = new Root();
@@ -69,6 +73,12 @@ namespace persistenciaDeDatos
             request.Method = "GET";
             request.ContentType = "application/json";
             request.Accept = "application/json";
+            climas = NewMethod(climas, request);
+            return (climas);
+        }
+
+        private static Root NewMethod(Root climas, HttpWebRequest request)
+        {
             try
             {
                 using (WebResponse response = request.GetResponse())
@@ -86,8 +96,26 @@ namespace persistenciaDeDatos
             catch (WebException ex)
             {
                 Console.WriteLine("Problemas de acceso a la API");
+                EstablecerValloresDefault(climas);
             }
-            return (climas);
+
+            return climas;
+        }
+
+        private static void EstablecerValloresDefault(Root climas)
+        {
+            Datum datumAux = new Datum();
+            datumAux.temp = 25.0;
+            datumAux.precip = 0;
+            datumAux.snow = 0;
+            datumAux.clouds = 0;
+            Weather weatherAux = new Weather();
+            weatherAux.description = " soleado y templado";
+            datumAux.weather = weatherAux;
+            List<Datum> listaDatumAux = new List<Datum>();
+            listaDatumAux.Add(datumAux);
+            climas.data = listaDatumAux;
+            climas.count = 1;
         }
     }
 }

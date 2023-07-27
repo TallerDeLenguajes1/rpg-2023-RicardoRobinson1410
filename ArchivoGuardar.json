@@ -9,43 +9,9 @@
         },
         "CaracteristicasPersonaje": {
             "Velocidad": 10,
-            "Destreza": 4,
-            "Fuerza": 4,
-            "Armadura": 7,
-            "Salud": 100,
-            "Nivel": 2
-        }
-    },
-    {
-        "DatosPersonaje": {
-            "TipoPersonaje": 3,
-            "Nombre": "The Rock",
-            "Apodo": "La Roca",
-            "FechaNac": "1972-05-02T00:00:00",
-            "Edad": 51
-        },
-        "CaracteristicasPersonaje": {
-            "Velocidad": 2,
-            "Destreza": 5,
-            "Fuerza": 2,
-            "Armadura": 2,
-            "Salud": 100,
-            "Nivel": 7
-        }
-    },
-    {
-        "DatosPersonaje": {
-            "TipoPersonaje": 3,
-            "Nombre": "Stone Cold Steve Austin",
-            "Apodo": "The Undertaker",
-            "FechaNac": "1964-12-18T00:00:00",
-            "Edad": 59
-        },
-        "CaracteristicasPersonaje": {
-            "Velocidad": 5,
-            "Destreza": 5,
-            "Fuerza": 7,
-            "Armadura": 7,
+            "Destreza": 2,
+            "Fuerza": 8,
+            "Armadura": 3,
             "Salud": 100,
             "Nivel": 4
         }
@@ -53,52 +19,86 @@
     {
         "DatosPersonaje": {
             "TipoPersonaje": 1,
+            "Nombre": "The Rock",
+            "Apodo": "La Roca",
+            "FechaNac": "1972-05-02T00:00:00",
+            "Edad": 51
+        },
+        "CaracteristicasPersonaje": {
+            "Velocidad": 10,
+            "Destreza": 2,
+            "Fuerza": 2,
+            "Armadura": 1,
+            "Salud": 100,
+            "Nivel": 4
+        }
+    },
+    {
+        "DatosPersonaje": {
+            "TipoPersonaje": 2,
+            "Nombre": "Stone Cold Steve Austin",
+            "Apodo": "The Undertaker",
+            "FechaNac": "1964-12-18T00:00:00",
+            "Edad": 59
+        },
+        "CaracteristicasPersonaje": {
+            "Velocidad": 5,
+            "Destreza": 1,
+            "Fuerza": 10,
+            "Armadura": 3,
+            "Salud": 100,
+            "Nivel": 8
+        }
+    },
+    {
+        "DatosPersonaje": {
+            "TipoPersonaje": 3,
             "Nombre": "Hulk Hogan",
             "Apodo": "Hulk Hogan",
             "FechaNac": "1953-08-11T00:00:00",
             "Edad": 70
         },
         "CaracteristicasPersonaje": {
-            "Velocidad": 10,
-            "Destreza": 1,
-            "Fuerza": 1,
-            "Armadura": 2,
+            "Velocidad": 6,
+            "Destreza": 5,
+            "Fuerza": 6,
+            "Armadura": 8,
             "Salud": 100,
-            "Nivel": 5
+            "Nivel": 6
         }
     },
     {
         "DatosPersonaje": {
-            "TipoPersonaje": 2,
+            "TipoPersonaje": 3,
             "Nombre": "Bret Hart",
             "Apodo": "Macho Man",
             "FechaNac": "1957-07-02T00:00:00",
             "Edad": 66
         },
         "CaracteristicasPersonaje": {
-            "Velocidad": 3,
-            "Destreza": 2,
-            "Fuerza": 10,
-            "Armadura": 3,
+            "Velocidad": 9,
+            "Destreza": 5,
+            "Fuerza": 9,
+            "Armadura": 4,
             "Salud": 100,
-            "Nivel": 5
+            "Nivel": 4
         }
     },
     {
         "DatosPersonaje": {
-            "TipoPersonaje": 2,
+            "TipoPersonaje": 1,
             "Nombre": "The Undertaker",
             "Apodo": "Nature Boy",
             "FechaNac": "1965-03-24T00:00:00",
             "Edad": 58
         },
         "CaracteristicasPersonaje": {
-            "Velocidad": 4,
-            "Destreza": 3,
-            "Fuerza": 10,
-            "Armadura": 4,
+            "Velocidad": 10,
+            "Destreza": 2,
+            "Fuerza": 3,
+            "Armadura": 7,
             "Salud": 100,
-            "Nivel": 4
+            "Nivel": 6
         }
     },
     {
@@ -110,29 +110,29 @@
             "Edad": 49
         },
         "CaracteristicasPersonaje": {
-            "Velocidad": 5,
-            "Destreza": 1,
+            "Velocidad": 3,
+            "Destreza": 4,
             "Fuerza": 10,
-            "Armadura": 5,
+            "Armadura": 1,
             "Salud": 100,
-            "Nivel": 1
+            "Nivel": 5
         }
     },
     {
         "DatosPersonaje": {
-            "TipoPersonaje": 1,
+            "TipoPersonaje": 3,
             "Nombre": "Triple H",
             "Apodo": "Rowdy Roddy Piper",
             "FechaNac": "1969-07-27T00:00:00",
             "Edad": 54
         },
         "CaracteristicasPersonaje": {
-            "Velocidad": 10,
-            "Destreza": 2,
-            "Fuerza": 1,
-            "Armadura": 8,
+            "Velocidad": 5,
+            "Destreza": 5,
+            "Fuerza": 6,
+            "Armadura": 1,
             "Salud": 100,
-            "Nivel": 3
+            "Nivel": 2
         }
     },
     {
@@ -144,12 +144,12 @@
             "Edad": 43
         },
         "CaracteristicasPersonaje": {
-            "Velocidad": 9,
+            "Velocidad": 7,
             "Destreza": 5,
-            "Fuerza": 4,
-            "Armadura": 5,
+            "Fuerza": 7,
+            "Armadura": 6,
             "Salud": 100,
-            "Nivel": 2
+            "Nivel": 4
         }
     },
     {
@@ -161,12 +161,12 @@
             "Edad": 38
         },
         "CaracteristicasPersonaje": {
-            "Velocidad": 4,
-            "Destreza": 4,
+            "Velocidad": 5,
+            "Destreza": 3,
             "Fuerza": 10,
-            "Armadura": 3,
+            "Armadura": 4,
             "Salud": 100,
-            "Nivel": 4
+            "Nivel": 5
         }
     }
 ]

@@ -2,15 +2,18 @@
 using System.IO;
 using espacioPersonajes;
 using persistenciaDeDatos;
+using espacioMostrar;
 using System.Collections.Generic;
 internal class Program
 {
     private static void Main(string[] args)
     {
-        Console.ForegroundColor=ConsoleColor.White;
+        var Show = new Mostrar();
+        //Creacion y cargado lista personajes
         var manejoArchivos = new personajesJson();
         string ruta = "ArchivoGuardar.json";
         List<personajes> personajeCreado = new List<personajes>();
+        // Si ya existe el archivo y no esta vacio GuardarJson, se leen los personajes y se los muestra
         if (manejoArchivos.Existe(ruta))
         {
             personajeCreado = manejoArchivos.LeerPersonajes(ruta);
@@ -22,6 +25,7 @@ internal class Program
                 contador += 1;
             }
         }
+        //Si no existe el archivo o esta vacio se crea la lista de personajes y se la guarda en el archivo Json
         else
         {
             var personajeFabrica = new FabricaDePersonajes();
@@ -33,57 +37,16 @@ internal class Program
             }
             manejoArchivos.GuardarPersonajes(ruta, personajeCreado);
         }
-        
-Console.WriteLine("╔════════════════════════════════════════════════════════╗");
-Console.WriteLine("║                                                        ║");
-Console.WriteLine("║  ¡Bienvenido al emocionante mundo de la batalla épica! ║");
-Console.WriteLine("║  En este juego, tendrás la oportunidad de sumergirte   ║");
-Console.WriteLine("║  en una aventura llena de acción y estrategia.         ║");
-Console.WriteLine("║  Prepárate para enfrentarte a desafiantes oponentes    ║");
-Console.WriteLine("║  y demostrar tu valía en la arena.                     ║");
-Console.WriteLine("║                                                        ║");
-Console.WriteLine("║  El juego consiste en elegir al azar un personaje y    ║");
-Console.WriteLine("║  enfrentarte a tus adversarios uno por uno hasta       ║");
-Console.WriteLine("║  vencerlos a todos. Tu misión es mantener tu salud     ║");
-Console.WriteLine("║  intacta mientras reduces la del oponente a cero.      ║");
-Console.WriteLine("║  Recuerda, si tu salud llega a cero, perderás, pero    ║");
-Console.WriteLine("║  si logras derrotar a tu oponente, avanzarás a la      ║");
-Console.WriteLine("║  siguiente ronda.                                      ║");
-Console.WriteLine("║                                                        ║");
-Console.WriteLine("║  Tendrás la oportunidad de atacar primero y luego      ║");
-Console.WriteLine("║  defenderte. Durante tus turnos de ataque, podrás      ║");
-Console.WriteLine("║  elegir entre lanzar un poderoso ataque o tomar una    ║");
-Console.WriteLine("║  bebida energética para recuperar un valor aleatorio   ║");
-Console.WriteLine("║  de salud entre 0 y 30. ¡La elección es tuya!          ║");
-Console.WriteLine("║                                                        ║");
-Console.WriteLine("║  ¡Prepárate para una batalla intensa y desafiante!     ║");
-Console.WriteLine("║  Enfréntate a tus oponentes con coraje y estrategia,   ║");
-Console.WriteLine("║  y recuerda que el juego llegará a su fin cuando       ║");
-Console.WriteLine("║  hayas sido derrotado o hayas eliminado a los 9        ║");
-Console.WriteLine("║  oponentes restantes.                                  ║");
-Console.WriteLine("║                                                        ║");
-Console.WriteLine("║  ¡Que comience la batalla! ¡Buena suerte!              ║");
-Console.WriteLine("║                                                        ║");
-Console.WriteLine("╚════════════════════════════════════════════════════════╝");
-        Console.ForegroundColor=ConsoleColor.Green;
-        Console.WriteLine(@"\n\n
-_________           _______ _______ _______ _______ _______ _       _______________________ 
-\__   __|\     /|  (  ____ (  ____ (  ____ (  ____ (  ___  ( (    /(  ___  \__    _(  ____ \
-   ) (  | )   ( |  | (    )| (    \| (    )| (    \| (   ) |  \  ( | (   ) |  )  ( | (    \/
-   | |  | |   | |  | (____)| (__   | (____)| (_____| |   | |   \ | | (___) |  |  | | (__    
-   | |  | |   | |  |  _____|  __)  |     __(_____  | |   | | (\ \) |  ___  |  |  | |  __)   
-   | |  | |   | |  | (     | (     | (\ (        ) | |   | | | \   | (   ) |  |  | | (      
-   | |  | (___) |  | )     | (____/| ) \ \_/\____) | (___) | )  \  | )   ( |\_)  ) | (____/\
-   )_(  (_______)  |/      (_______|/   \__\_______(_______|/    )_|/     \(____/  (_______/
-                                                                                            
-");
+
+        Show.CondicionInicial();
+        //Se elige un personaje aleatorio de la lista de personajes. Luego, se lo removerá de la lista para que no haya personajes repetidos
         var rand = new Random();
         var personaje1 = new personajes();
         personaje1 = personajeCreado[rand.Next(0, 9)];
         personajeCreado.Remove(personaje1);
-        personaje1.Mostrar();
+        Show.MostrarMiPersonaje(personaje1);
         var clima = manejoArchivos.GetClimas();
-        Console.ForegroundColor=ConsoleColor.Blue;
+        Console.ForegroundColor = ConsoleColor.Blue;
         Console.WriteLine(@"
 ____    __    ______           ______     
 /\  _`\ /\ \  /\__  _\  /'\_/`\/\  _  \    
@@ -92,195 +55,84 @@ ____    __    ______           ______
   \ \ \L\ \ \ \L\ \_\ \_\ \ \_/\ \ \ \/\ \ 
    \ \____/\ \____/\_____\ \_\\ \_\ \_\ \_\
     \/___/  \/___/\/_____/\/_/ \/_/\/_/\/_/");
+        //Se muestra el clima que sacamos de la APPI, y según haya sol, nieve, lluvia o nubes se muestra un dibujo de ello
+        //Para cada tipo de clima, la salud inicial con la que empieza el personaje en la primera ronda será distinta
+        ModificarSaludPorClima(personaje1, clima);
+        Show.MostrarClima(clima);
+        int ronda = 1;
+        //Establezco una condición en el while para que itere mientras la lista de personajes no este vacía y la salud del personaje sera >=0
+        while (personajeCreado.Count() != 0 && personaje1.CaracteristicasPersonaje.Salud >= 0)
+        {
+            //Elijo un rival de manera aleatoria de la lista
+            var rival = new personajes();
+            rival = personajeCreado[rand.Next(0, (personajeCreado.Count() - 1))];
+            Show.MostrarComienzoBatalla(ronda);
+            //Establezco la condición de iteración para una batalla, pues la salud de ambos personajes debe ser >=0
+            while (personaje1.CaracteristicasPersonaje.Salud >= 0 && rival.CaracteristicasPersonaje.Salud >= 0)
+            {
+                // Desarrollo de la batalla, un turno cada uno. Nuestro personaje puede elegir entre atacar o recuperar vida. El rival solo ataca
+                Console.ForegroundColor = ConsoleColor.White;
+                Ataque(personaje1, rival);
+                Show.MostrarMiturno(personaje1,rival);
+                if (rival.CaracteristicasPersonaje.Salud >= 0)
+                {
+                    AtaqueRival(rival, personaje1);
+                    Show.MostrarTurnoRival(personaje1,rival);
+                }
+        
+            }
+            //Al terminar el enfrentamiento, se remueve al rival de la lista y se le aumenta un un nivel a nuestro personaje
+            ronda += 1;
+            personajeCreado.Remove(rival);
+            personaje1.CaracteristicasPersonaje.Nivel += 1;
+            if (personaje1.CaracteristicasPersonaje.Salud > 0)
+            {
+                //Luego del enfrentamiento, se restablece la salud del personaje a 100
+                personaje1.CaracteristicasPersonaje.Salud = 100;
+            }
+        }
+        if (personaje1.CaracteristicasPersonaje.Salud >= 0)
+        {
+            Show.MostrarGanador(personaje1);
+        }
+        else
+        {
+            Show.MostrarPerdedor();
+        }
+
+    }
+
+    private static void ModificarSaludPorClima(personajes personaje1, Root? clima)
+    {
         foreach (var item in clima.data)
         {
-            Console.WriteLine("\nTemperatura: " + item.temp + "\nWeather: " + item.weather.description);
-            if (item.snow > 0)
+            if (item.snow != 0)
             {
-                Console.WriteLine(@"
-               _(  )_( )_
-              (_   _    _)
-              * *(_) (__)
-             * * * * * *
-            * * * * * *
-            ");
+                personaje1.CaracteristicasPersonaje.Salud = 50;
             }
             else
             {
-                if (item.precip > 0)
+                if (item.precip != 0)
                 {
-                    Console.ForegroundColor=ConsoleColor.DarkBlue;
-                    Console.WriteLine(@"
-               _(  )_( )_
-              (_   _    _)
-              / /(_) (__)
-             / / / / / /
-            / / / / / /
-            ");
+                    personaje1.CaracteristicasPersonaje.Salud = 75;
                 }
                 else
                 {
                     if (item.clouds > 0)
                     {
-                        Console.ForegroundColor = ConsoleColor.Blue;
-                        Console.WriteLine(@"                                       ___    ,'""""'.
-                                    ,'''  '' ''''      `.
-                                   ,'        _.         `._
-                                  ,'       ,'              `''''.
-                                 ,'    .-''`.    ,-'            `.
-                                ,'    (        ,'                :
-                              ,'     ,'           __,            `.
-                        ,'''''     .' ;-.    ,  ,'  \             `''''.
-                      ,'           `-(   `._(_,'     )_                `.
-                     ,'         ,---. \ @ ;   \ @ _,'                   `.
-                ,-""'         ,'      ,--'-    `;'                       `.
-               ,'            ,'      (      `. ,'                          `.
-               ;            ,'        \    _,','                            `.
-              ,'            ;          `--'  ,'                              `.
-             ,'             ;          __    (                    ,           `.
-             ;              `____...  `78b   `.                  ,'           ,'
-             ;    ...----'''' )  _.-  .d8P    `.                ,'    ,'    ,'
-_....----''' '.        _..--'_.-:.-' .'        `.             ,''.   ,' `--'
-              `' mGk '' _.-'' .-'`-.:..___...--' `-._      ,-''   `-'
-        _.--'       _.-'    .'   .' .'               `'''''
-  __.-''        _.-'     .-'   .'  /
- '          _.-' .-'  .-'        .'
-        _.-'  .-'  .-' .'  .'   /
-    _.-'      .-'   .-'  .'   .'
-_.-'       .-'    .'   .'    /
-       _.-'    .-'   .'    .'
-    .-'            .'
-");
+                        personaje1.CaracteristicasPersonaje.Salud = 100;
                     }
                     else
                     {
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine(@"       \     (      /
-   `.    \     )    /    .'
-     `.   \   (    /   .'
-       `.  .-''''-.  .'
- `~._    .'/_    _\`.    _.~'
-     `~ /  / \  / \  \ ~'
-_ _ _ _|  _\O/  \O/_  |_ _ _ _
-       | (_)  /\  (_) |
-    _.~ \  \      /  / ~._
- .~'     `. `.__.' .'     `~.
-       .'  `-,,,,-'  `.
-     .'   /    )   \   `.
-   .'    /    (     \    `.
-        /      )     \     
-              (");
+                        personaje1.CaracteristicasPersonaje.Salud = 125;
                     }
 
                 }
             }
         }
-        int ronda=1;
-        while (personajeCreado.Count() != 0 && personaje1.CaracteristicasPersonaje.Salud >= 0)
-        {
-            var rival = new personajes();
-            rival = personajeCreado[rand.Next(0, (personajeCreado.Count() - 1))];
-            Console.WriteLine("\n");
-            Console.WriteLine(@"
-██████╗░██╗██╗░░░██╗░█████╗░██╗░░░░░
-██╔══██╗██║██║░░░██║██╔══██╗██║░░░░░
-██████╔╝██║╚██╗░██╔╝███████║██║░░░░░
-██╔══██╗██║░╚████╔╝░██╔══██║██║░░░░░
-██║░░██║██║░░╚██╔╝░░██║░░██║███████╗
-╚═╝░░╚═╝╚═╝░░░╚═╝░░░╚═╝░░╚═╝╚══════╝");
-            rival.Mostrar();
-            Console.WriteLine($"╔═════════════════════════════════════════╗");
-            Console.WriteLine($"║             RONDA {ronda}               ║");
-            Console.WriteLine($"╚═════════════════════════════════════════╝");
-            Console.WriteLine(@"
-            
-█▀▀ █▀█ █▀▄▀█ █ █▀▀ █▄░█ ▀█ ▄▀█   █░░ ▄▀█   █▄▄ ▄▀█ ▀█▀ ▄▀█ █░░ █░░ ▄▀█
-█▄▄ █▄█ █░▀░█ █ ██▄ █░▀█ █▄ █▀█   █▄▄ █▀█   █▄█ █▀█ ░█░ █▀█ █▄▄ █▄▄ █▀█
-");
-            while (personaje1.CaracteristicasPersonaje.Salud >= 0 && rival.CaracteristicasPersonaje.Salud >= 0)
-            {
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("------------Su turno-------------");
-                Ataque(personaje1, rival);
-                Console.WriteLine($"Su salud:{personaje1.CaracteristicasPersonaje.Salud}");
-                Console.WriteLine($"Salud de {rival.DatosPersonaje.Nombre}: {rival.CaracteristicasPersonaje.Salud}");
-                if (rival.CaracteristicasPersonaje.Salud >= 0)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("------------TURNO DEL RIVAL------------\n");
-                    AtaqueRival(rival, personaje1);
-                }
-                Console.WriteLine($"Su salud:{personaje1.CaracteristicasPersonaje.Salud}");
-                Console.WriteLine($"Salud de {rival.DatosPersonaje.Nombre}: {rival.CaracteristicasPersonaje.Salud}");
-            }
-            ronda+=1;
-            personajeCreado.Remove(rival);
-            if(personaje1.CaracteristicasPersonaje.Salud>0)
-            {
-                personaje1.CaracteristicasPersonaje.Salud=100;
-            }
-        }
-        if (personaje1.CaracteristicasPersonaje.Salud >= 0)
-        {
-            Console.ForegroundColor=ConsoleColor.Yellow;
-            Console.WriteLine(@"\t
-███████╗███████╗██╗░░░░░██╗░█████╗░██╗██████╗░░█████╗░██████╗░███████╗░██████╗██╗██╗██╗███████╗░██████╗
-██╔════╝██╔════╝██║░░░░░██║██╔══██╗██║██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔════╝██║██║██║██╔════╝██╔════╝
-█████╗░░█████╗░░██║░░░░░██║██║░░╚═╝██║██║░░██║███████║██║░░██║█████╗░░╚█████╗░██║██║██║█████╗░░╚█████╗░
-██╔══╝░░██╔══╝░░██║░░░░░██║██║░░██╗██║██║░░██║██╔══██║██║░░██║██╔══╝░░░╚═══██╗╚═╝╚═╝╚═╝██╔══╝░░░╚═══██╗
-██║░░░░░███████╗███████╗██║╚█████╔╝██║██████╔╝██║░░██║██████╔╝███████╗██████╔╝██╗██╗██╗███████╗██████╔╝
-╚═╝░░░░░╚══════╝╚══════╝╚═╝░╚════╝░╚═╝╚═════╝░╚═╝░░╚═╝╚═════╝░╚══════╝╚═════╝░╚═╝╚═╝╚═╝╚══════╝╚═════╝░
-
-███████╗██╗░░░░░  ░██████╗░░█████╗░███╗░░██╗░█████╗░██████╗░░█████╗░██████╗░██╗██╗
-██╔════╝██║░░░░░  ██╔════╝░██╔══██╗████╗░██║██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║██║
-█████╗░░██║░░░░░  ██║░░██╗░███████║██╔██╗██║███████║██║░░██║██║░░██║██████╔╝██║██║
-██╔══╝░░██║░░░░░  ██║░░╚██╗██╔══██║██║╚████║██╔══██║██║░░██║██║░░██║██╔══██╗╚═╝╚═╝
-███████╗███████╗  ╚██████╔╝██║░░██║██║░╚███║██║░░██║██████╔╝╚█████╔╝██║░░██║██╗██╗
-╚══════╝╚══════╝  ░╚═════╝░╚═╝░░╚═╝╚═╝░░╚══╝╚═╝░░╚═╝╚═════╝░░╚════╝░╚═╝░░╚═╝╚═╝╚═╝");
-            personaje1.Mostrar();
-            Console.WriteLine(@$"        
-        |||||||||
-        | _   _ |      
-       (  ' _ '  )
-        |  ___  |               
-         |_____|                   
-  _______/     \_______         
- /                     \          SOY EL MEJOR!!!!
-|   |\             /|   |
-|   ||  .       .  ||   |     
-|   / \           / \   |
-\  |   | |_ | _| |   |  /     
-|==|   | |_ | _| |   |==|                    
-/  /_ _|_|__|__|_|_ _\  \
-|___| /            \|___|
-      |     |      |
-      |     |      |
-      |MEX  |   MEX|         
-      |     |      |           
-      '|''|'''|''|''           
-       |  |   |  |      {personaje1.DatosPersonaje.Apodo};
-       |  |   |  |
-      /   )   (   \
-     Ooooo     ooooO");
-        }
-        else
-        {
-            Console.ForegroundColor=ConsoleColor.DarkRed;
-            Console.WriteLine(@"
-  _______
- /       \
-|         |
-|   R.I.P |
-|         |
-|         |
- \       /
-  -------");
-          Console.WriteLine(@"
-█▀▀ ▄▀█ █▀▄▀█ █▀▀   █▀█ █░█ █▀▀ █▀█
-█▄█ █▀█ █░▀░█ ██▄   █▄█ ▀▄▀ ██▄ █▀▄");
-        }
-
     }
+
+    //Funcion ataque de nuestro personaje, tiene la posibilidad de atacar o recuperar vida. Lo maximo de vida que se puede tener es 100
     public static void Ataque(personajes personajeAtaca, personajes personajeDefiende)
     {
         int ataque;
@@ -314,6 +166,7 @@ _ _ _ _|  _\O/  \O/_  |_ _ _ _
             }
         }
     }
+    //Funcion de ataque del rival, solo puede atacar
     public static void AtaqueRival(personajes personajeAtaca, personajes personajeDefiende)
     {
         int ataque;

@@ -2,7 +2,7 @@ using System;
 using System.IO;
 namespace espacioPersonajes{
 public class FabricaDePersonajes{
-string[] nombresLuchadores=
+private static string[] nombresLuchadores=
 {
     "John Cena",
     "The Rock",
@@ -28,7 +28,7 @@ private static string[] apodosLuchadores =
     "Bret 'The Hitman' Hart",
     "The magician boy"
 };
-DateTime[] fechasNacimiento =
+private static DateTime[] fechasNacimiento =
 {
     new DateTime(1977, 4, 23),    // John Cena
     new DateTime(1972, 5, 2),     // The Rock
@@ -42,72 +42,77 @@ DateTime[] fechasNacimiento =
     new DateTime(1985, 5, 25)     // Roman Reigns
 };
 
-    public personajes CrearPersonaje(int i){
-        datos DatosPersonaje = new datos();
-        var CaracteristicasPersonaje = new caracteristicas();
-        personajes personaje=new personajes();
-        Random indicerandom=new Random();
-        DatosPersonaje.Nombre=nombresLuchadores[i];
-        DatosPersonaje.Apodo=apodosLuchadores[i];
-        DatosPersonaje.FechaNac=fechasNacimiento[i];
-        // Console.WriteLine("Ingrese el tipo de personaje (El personaje tendrá 10 puntos en la habilidad que predomine, en las otras sera aleatorio)");
-        // Console.WriteLine("1. Veloz");
-        // Console.WriteLine("2. Fuerte");
-        // Console.WriteLine("3. Habil");
-        // Console.WriteLine("4. Resistente");
-        // string? a=Console.ReadLine();
-        // Tipopersonjes tip;
-        // bool anda1=Enum.TryParse(a, out tip);
-        // if(anda1){
-        //     Console.WriteLine("Ingreso existoso enum");
-        // }else{
-        //     Console.WriteLine("Error enum");
-        // }
-            Random rand = new Random();
-            Tipopersonjes tip = (Tipopersonjes)rand.Next(1,4);
-        DatosPersonaje.TipoPersonaje=tip;
-        DatosPersonaje.Edad=CalcularEdad(DatosPersonaje.FechaNac);
-        switch (DatosPersonaje.TipoPersonaje)
+//Funcion crear personajes: El orden de los personajes siempre será el mismo, lo que cambiará serán las caracterisiticas
+    public personajes CrearPersonaje(int i)
         {
-            case Tipopersonjes.veloz: 
-                CaracteristicasPersonaje.Velocidad=10;
-                CaracteristicasPersonaje.Destreza=indicerandom.Next(1,5);
-                CaracteristicasPersonaje.Fuerza=indicerandom.Next(1,10);
-                CaracteristicasPersonaje.Nivel=indicerandom.Next(1,10);
-                CaracteristicasPersonaje.Armadura=indicerandom.Next(1,10);
-                break;
-            case Tipopersonjes.habil: 
-                CaracteristicasPersonaje.Velocidad=indicerandom.Next(1,10);
-                CaracteristicasPersonaje.Destreza=5;
-                CaracteristicasPersonaje.Fuerza=indicerandom.Next(1,10);
-                CaracteristicasPersonaje.Nivel=indicerandom.Next(1,10);
-                CaracteristicasPersonaje.Armadura=indicerandom.Next(1,10);
-                break;
-            case Tipopersonjes.fuerte:
-                CaracteristicasPersonaje.Velocidad=indicerandom.Next(1,10);
-                CaracteristicasPersonaje.Destreza=indicerandom.Next(1,5);
-                CaracteristicasPersonaje.Fuerza=10;
-                CaracteristicasPersonaje.Nivel=indicerandom.Next(1,10);
-                CaracteristicasPersonaje.Armadura=indicerandom.Next(1,10);
-                break;
-            case Tipopersonjes.resistente:
-                CaracteristicasPersonaje.Velocidad=indicerandom.Next(1,10);
-                CaracteristicasPersonaje.Destreza=indicerandom.Next(1,5);
-                CaracteristicasPersonaje.Fuerza=indicerandom.Next(1,10);
-                CaracteristicasPersonaje.Nivel=indicerandom.Next(1,10);
-                CaracteristicasPersonaje.Armadura=10;
-                break;            
+            datos DatosPersonaje = new datos();
+            var CaracteristicasPersonaje = new caracteristicas();
+            personajes personaje = new personajes();
+            Random indicerandom = new Random();
+            DatosPersonaje.Nombre = nombresLuchadores[i];
+            DatosPersonaje.Apodo = apodosLuchadores[i];
+            DatosPersonaje.FechaNac = fechasNacimiento[i];
+            //Se selecciona aleatoriamente un tipo de personaje del enum Tipopersonajes y según que tipo sea, tendrá un valor de 10 en la característica que lo identifique, los demás valores serán aleatorios
+            Random rand = new Random();
+            Tipopersonjes tip = (Tipopersonjes)rand.Next(1, 4);
+            DatosPersonaje.TipoPersonaje = tip;
+            DatosPersonaje.Edad = CalcularEdad(DatosPersonaje.FechaNac);
+            CrearPersonajePorTipo(DatosPersonaje, CaracteristicasPersonaje, indicerandom); CaracteristicasPersonaje.Nivel = indicerandom.Next(1, 10);
+            EstablecerCarateriscasBase(DatosPersonaje, CaracteristicasPersonaje, personaje);
+
+            return (personaje);
         }
-        CaracteristicasPersonaje.Nivel=indicerandom.Next(1,10);
-        CaracteristicasPersonaje.Salud=100;
-        personaje.CaracteristicasPersonaje = new caracteristicas();
-        personaje.DatosPersonaje = new datos();
-        personaje.CaracteristicasPersonaje=CaracteristicasPersonaje;
-        personaje.DatosPersonaje=DatosPersonaje;
 
-        return(personaje);
-    }
+        private static void EstablecerCarateriscasBase(datos DatosPersonaje, caracteristicas CaracteristicasPersonaje, personajes personaje)
+        {
+            CaracteristicasPersonaje.Salud = 100;
+            personaje.CaracteristicasPersonaje = new caracteristicas();
+            personaje.DatosPersonaje = new datos();
+            personaje.CaracteristicasPersonaje = CaracteristicasPersonaje;
+            personaje.DatosPersonaje = DatosPersonaje;
+        }
 
+        private static void CrearPersonajePorTipo(datos DatosPersonaje, caracteristicas CaracteristicasPersonaje, Random indicerandom)
+        {
+            switch (DatosPersonaje.TipoPersonaje)
+            {
+                case Tipopersonjes.veloz:
+                    CaracteristicasPersonaje.Velocidad = 10;
+                    CaracteristicasPersonaje.Destreza = indicerandom.Next(1, 5);
+                    CaracteristicasPersonaje.Fuerza = indicerandom.Next(1, 10);
+                    CaracteristicasPersonaje.Nivel = indicerandom.Next(1, 10);
+                    CaracteristicasPersonaje.Armadura = indicerandom.Next(1, 10);
+                    break;
+                case Tipopersonjes.habil:
+                    CaracteristicasPersonaje.Velocidad = indicerandom.Next(1, 10);
+                    CaracteristicasPersonaje.Destreza = 5;
+                    CaracteristicasPersonaje.Fuerza = indicerandom.Next(1, 10);
+                    CaracteristicasPersonaje.Nivel = indicerandom.Next(1, 10);
+                    CaracteristicasPersonaje.Armadura = indicerandom.Next(1, 10);
+                    break;
+                case Tipopersonjes.fuerte:
+                    CrearPersonajeFuerte(CaracteristicasPersonaje, indicerandom);
+                    break;
+                case Tipopersonjes.resistente:
+                    CaracteristicasPersonaje.Velocidad = indicerandom.Next(1, 10);
+                    CaracteristicasPersonaje.Destreza = indicerandom.Next(1, 5);
+                    CaracteristicasPersonaje.Fuerza = indicerandom.Next(1, 10);
+                    CaracteristicasPersonaje.Nivel = indicerandom.Next(1, 10);
+                    CaracteristicasPersonaje.Armadura = 10;
+                    break;
+            }
+        }
+
+        private static void CrearPersonajeFuerte(caracteristicas CaracteristicasPersonaje, Random indicerandom)
+        {
+            CaracteristicasPersonaje.Velocidad = indicerandom.Next(1, 10);
+            CaracteristicasPersonaje.Destreza = indicerandom.Next(1, 5);
+            CaracteristicasPersonaje.Fuerza = 10;
+            CaracteristicasPersonaje.Nivel = indicerandom.Next(1, 10);
+            CaracteristicasPersonaje.Armadura = indicerandom.Next(1, 10);
+        }
+
+        //Funcion para según la fecha de nacimiento, calcular la edad
         private int CalcularEdad(DateTime fechanac)
         {
             DateTime fechaHoy = DateTime.Now;
